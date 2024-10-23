@@ -8,6 +8,22 @@ import "math/big"
 // of exactly n events happening, then sums such probabilities for k>=n. It has
 // complexity of O(N^2).
 func ProbabilityAtLeastN(n int, probabilities []big.Float) big.Float {
+	// Consider special cases.
+	switch {
+	// If n is higher than the number of events, then it is impossible for
+	// at least n events to happen. Return probability 0.
+	case n > len(probabilities):
+		var zero big.Float
+		return zero
+
+	// If n is a negative number than there is a certainty that at least n
+	// events happen. Return probability 1.
+	case n <= 0:
+		var one big.Float
+		one.SetFloat64(1)
+		return one
+	}
+
 	// exactProbs stores probabilities of exactly i events happening. It is
 	// built dynamically, using dynamic programming approach.
 	exactProbs := make([]big.Float, len(probabilities)+1)

@@ -33,6 +33,26 @@ func TestProbabilityAtLeastN(t *testing.T) {
 			want: "0.01",
 		},
 		{
+			probabilities: []string{"0.1", "0.1"},
+			n:             3,
+			want:          "0",
+		},
+		{
+			probabilities: []string{"0.1", "0.1"},
+			n:             10,
+			want:          "0",
+		},
+		{
+			probabilities: []string{"0.1", "0.1"},
+			n:             -1,
+			want:          "1",
+		},
+		{
+			probabilities: []string{"0.1", "0.1"},
+			n:             -100,
+			want:          "1",
+		},
+		{
 			probabilities: []string{"0.1", "0.1", "0.2"},
 			n:             1,
 			// 1 - 0.9*0.9*0.8.
