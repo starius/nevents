@@ -248,3 +248,23 @@ func TestProbabilityAtLeastN(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkProbabilityAtLeastN(b *testing.B) {
+	const (
+		M = 120
+		N = 41
+	)
+
+	var p big.Float
+	p.SetFloat64(0.000001)
+
+	probabilities := make([]big.Float, M)
+	for i := range probabilities {
+		probabilities[i] = p
+	}
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = ProbabilityAtLeastN(N, probabilities)
+	}
+}
