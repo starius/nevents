@@ -33,6 +33,12 @@ func ProbabilityAtLeastN(n int, probabilities []big.Float) big.Float {
 	// happening.
 	exactProbs[0].SetFloat64(1)
 
+	// Optimization: we are not interested in exactProbs[:n], they don't
+	// affect end result. At each iteration of the main loop, a cell depends
+	// on itself and on previos cell. We skip filling some prefix of
+	// exactProbs. We only care at maximum about len(probabilities)-n cells.
+	width := len(probabilities) - n
+
 	// Go through all the events, adding them to solution.
 	for i, pi := range probabilities {
 		// Update exactProbs elements from (i+1) to 0. We do it in the
@@ -51,8 +57,15 @@ func ProbabilityAtLeastN(n int, probabilities []big.Float) big.Float {
 		qi.SetFloat64(1)
 		qi.Sub(&qi, &pi)
 
+		// Optimization: we don't need some cells in the beginning. See
+		// the comment about width above.
+		left := i - width
+		if left < 0 {
+			left = 0
+		}
+
 		// Now visit all the elements in the middle (not last, not 0).
-		for j := i; j > 0; j-- {
+		for j := i; j > left; j-- {
 			var withoutI, withI big.Float
 			// j events can happen two ways: either i-th event
 			// doesn't happen and j events happened in the previous
