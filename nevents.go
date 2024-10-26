@@ -88,8 +88,8 @@ func ProbabilityAtLeastN(n int, probabilities []big.Float) big.Float {
 	// events. To find the probability of >=n events happening, we need to
 	// calculate the sum in this array from n to the end.
 	var pn big.Float
-	for _, p := range exactProbs[n:] {
-		pn.Add(&pn, &p)
+	for i := len(exactProbs) - 1; i >= n; i-- {
+		pn.Add(&pn, &exactProbs[i])
 	}
 
 	return pn
